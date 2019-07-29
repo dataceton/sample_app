@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
-
   def setup
     @user = User.new(name: 'Example user', email: 'user@example.com',
                      password: 'foobar', password_confirmation: 'foobar')
@@ -81,6 +82,35 @@ class UserTest < ActiveSupport::TestCase
     @user.microposts.create!(content: 'to destroy')
     assert_difference 'Micropost.count', -1 do
       @user.destroy
+    end
+  end
+
+  test 'should follow and unfollow a user' do
+    daniel = users(:daniel)
+    archer = users(:archer)
+    assert_not daniel.following?(archer)
+    daniel.follow(archer)
+    assert daniel.following?(archer)
+    assert archer.followers.include?(daniel)
+    daniel.unfollow(archer)
+    assert_not daniel.following?(archer)
+  end
+
+  test 'feed should have the right posts' do
+    daniel = users(:daniel)
+    archer = users(:archer)
+    lana   = users(:lana)
+    # Posts from followed user
+    lana.microposts.each do |post_following|
+      assert daniel.feed.include?(post_following)
+    end
+    # Posts from self
+    daniel.microposts.each do |post_self|
+      assert daniel.feed.include?(post_self)
+    end
+    # Posts from unfollowed user
+    archer.microposts.each do |post_unfollowed|
+      assert_not daniel.feed.include?(post_unfollowed)
     end
   end
 end
