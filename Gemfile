@@ -33,7 +33,7 @@ gem 'will_paginate', '~> 3.1', '>= 3.1.6'
 # gem 'will_paginate-bootstrap', '~> 1.0', '>= 1.0.1'
 gem 'bootstrap-will_paginate', '~> 1.0'
 
-gem 'carrierwave', '~> 1.3', '>= 1.3.1'
+gem 'carrierwave', '~> 1.3'
 gem 'mini_magick', '~> 4.9', '>= 4.9.5'
 
 # Use ActiveStorage variant
